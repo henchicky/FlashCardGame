@@ -26,18 +26,33 @@ const rules = reactive<FormRules<RuleForm>>({
     {
       required: true,
       message: 'Required!',
-      trigger: 'blur',
-      type: 'number'
+      trigger: 'blur'
     }
   ]
 })
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
+
   await formEl.validate((valid, fields) => {
+    // console.log(fields)
+    // console.log(valid)
+    // console.log(formEl)
+    // formEl.mes
     if (valid) {
       console.log('submit!')
-      axios.post("http://localhost:5176/Game/Input")
+      console.log(answer)
+      axios.post<boolean>("http://localhost:5176/Game/Input", {input: answer.input, user: "test"})
+      .then(res => {
+        console.log(res.data)
+        if (res.data){
+          console.log(true);
+          getGameDetails();
+        } 
+        else {
+          console.error("Wrong answer!")
+        }
+      })
     } else {
       console.log('error submit!', fields)
     }
@@ -91,7 +106,7 @@ onBeforeMount(() => getGameDetails())
         =
       </el-col>
       <el-col :span="8">
-        <el-form-item prop="answer">
+        <el-form-item prop="input">
           <el-input-number v-model="answer.input" :controls="false" />
         </el-form-item>
       </el-col>

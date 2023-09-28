@@ -27,18 +27,18 @@ public class GameService : IGameService
         };
     }
 
-    public bool CheckInput(int input, string user)
+    public bool CheckInput(CheckInputRequest request)
     {
-        _answers.TryGetValue(user, out var answers);
-        _scores.TryGetValue(user, out var score);
+        _answers.TryGetValue(request.User, out var answers);
+        _scores.TryGetValue(request.User, out var score);
 
-        if (answers == input)
+        if (answers == request.Input)
         {
-            _scores[user] = score + 1;
+            _scores[request.User] = score + 1;
             return true;
         }
 
-        _scores[user] = score - 1;
+        _scores[request.User] = score - 1;
         return false;
     }
 

@@ -20,10 +20,10 @@ public class GameController : ControllerBase
     {
         return _gameService.GenerateGameRequest(request);
     }
-    
+
     [HttpPost("Input")]
-    public bool CheckInput([FromBody] int input, string user)
+    public bool CheckInput(CheckInputRequest request)
     {
-        return _gameService.CheckInput(input, user);
+        return _gameService.CheckInput(request);
     }
 }
