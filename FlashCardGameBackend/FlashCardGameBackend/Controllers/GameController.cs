@@ -15,15 +15,15 @@ public class GameController : ControllerBase
         _gameService = gameService;
     }
 
-    [HttpGet("GameDetails")]
-    public GameDetails GetGameDetails()
+    [HttpPost("GameDetails")]
+    public GameDetails GetGameDetails(List<OperatorType> operatorTypes, string user)
     {
-        return _gameService.GenerateGameRequest(new List<OperatorType>());
+        return _gameService.GenerateGameRequest(operatorTypes, user);
     }
     
     [HttpPost("Input")]
-    public bool CheckInput([FromBody] int input)
+    public bool CheckInput([FromBody] int input, string user)
     {
-        return _gameService.CheckInput(input);
+        return _gameService.CheckInput(input, user);
     }
 }
