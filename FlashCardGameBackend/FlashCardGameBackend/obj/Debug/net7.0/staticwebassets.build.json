@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "bG4mqfglJk9BNkQZaEMbgEYZ3kpqsjTIYKfAdAoZvvQ=",
+  "Source": "FlashCardGameBackend",
+  "BasePath": "_content/FlashCardGameBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
