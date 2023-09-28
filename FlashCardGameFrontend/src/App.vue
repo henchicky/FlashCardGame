@@ -66,7 +66,7 @@ function toOperatorSymbols(operatorType: OperatorType | null){
 }
 
 function getGameDetails(){
-  axios.get<GameDetails>("http://localhost:5176/Game/GameDetails")
+  axios.post<GameDetails>("http://localhost:5176/Game/GameDetails", { operatorTypes : [1], user : 'test'})
   .then(res => gameDetail.value = res.data)
   .catch(err => console.error(err))
 }
