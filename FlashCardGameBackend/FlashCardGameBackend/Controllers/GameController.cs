@@ -16,9 +16,9 @@ public class GameController : ControllerBase
     }
 
     [HttpPost("GameDetails")]
-    public GameDetails GetGameDetails(List<OperatorType> operatorTypes, string user)
+    public GameDetails GetGameDetails(GameDetailsRequest request)
     {
-        return _gameService.GenerateGameRequest(operatorTypes, user);
+        return _gameService.GenerateGameRequest(request);
     }
     
     [HttpPost("Input")]

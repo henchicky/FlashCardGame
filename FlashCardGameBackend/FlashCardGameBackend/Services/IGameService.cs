@@ -4,6 +4,6 @@ namespace FlashCardGameBackend.Services;
 
 public interface IGameService
 {
-    GameDetails GenerateGameRequest(List<OperatorType> operatorTypes, string user);
+    GameDetails GenerateGameRequest(GameDetailsRequest request);
     bool CheckInput(int input, string user);
 }

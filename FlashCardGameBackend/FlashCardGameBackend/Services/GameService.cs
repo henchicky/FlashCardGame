@@ -7,16 +7,16 @@ public class GameService : IGameService
     private readonly Dictionary<string, int> _scores = new();
     private readonly Dictionary<string, int> _answers = new();
 
-    public GameDetails GenerateGameRequest(List<OperatorType> operatorTypes, string user)
+    public GameDetails GenerateGameRequest(GameDetailsRequest request)
     {
         var rnd = new Random();
         var num1 = rnd.Next(0, 12);
         var num2 = rnd.Next(0, 12);
-        var index = rnd.Next(operatorTypes.Count);
-        var operatorType = operatorTypes[index];
+        var index = rnd.Next(request.OperatorTypes.Count);
+        var operatorType = request.OperatorTypes[index];
 
-        _answers.Remove(user);
-        _answers.Add(user, GetAnswer(num1, num2, operatorType));
+        _answers.Remove(request.User);
+        _answers.Add(request.User, GetAnswer(num1, num2, operatorType));
 
         return new GameDetails
         {

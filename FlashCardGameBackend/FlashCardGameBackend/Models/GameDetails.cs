@@ -8,11 +8,3 @@ public class GameDetails
     public int Score { get; set; } = 0;
 
 }
-
-public enum OperatorType
-{
-    Addition,
-    Subtraction,
-    Multiplication,
-    Division
-}
