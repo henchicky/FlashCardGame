@@ -4,3 +4,9 @@ export enum OperatorType {
     Multiplication,
     Division,
 }
+
+export enum GameState {
+    Pending,
+    Start,
+    End
+}

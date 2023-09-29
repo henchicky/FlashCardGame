@@ -25,5 +25,6 @@ declare module 'vue' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Timer: typeof import('./src/components/Timer.vue')['default']
   }
 }
