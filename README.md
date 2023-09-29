@@ -1,6 +1,6 @@
 Flash Card Game
-Backend is written in .NET Core
-Frontend is written in VueTS
+
+Backend is written in .NET Core, Frontend is written in VueTS
 
 Instructions for running in local
 - Frontend
