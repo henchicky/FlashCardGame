@@ -63,16 +63,17 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 function getGameDetails() {
-  axios.post<GameDetails>("http://localhost:5176/Game/GameDetails", { operatorTypes: operatorDropdown.value, user: user.value })
+  axios.post<GameDetails>("http://localhost:5176/Game/GameDetails", { operatorTypes: operatorDropdown.value, user: generateRandomUser() })
     .then(res => {
       gameDetail.value = res.data
       answer.input = null
+      gameStatus.value = GameState.Start
     })
     .catch(err => console.error(err))
 }
 
 function startGame() {
-  gameStatus.value = GameState.Start;
+  getGameDetails()
   timer.value = 60
   interval = setInterval(() => {
     if (timer.value > 0) {
@@ -89,8 +90,6 @@ const resetGame = (formEl: FormInstance | undefined) => {
   if (formEl)
     formEl.resetFields()
   gameStatus.value = GameState.Pending
-  user.value = generateRandomUser()
-  gameDetail.value.score = 0
   clearInterval(interval)
 }
 
