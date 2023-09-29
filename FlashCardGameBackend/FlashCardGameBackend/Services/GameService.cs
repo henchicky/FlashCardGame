@@ -16,7 +16,7 @@ public class GameService : IGameService
 
     private void GenerateListOfPossibilities()
     {
-        var numbers = Enumerable.Range(1, 3).ToList();
+        var numbers = Enumerable.Range(0, 12).ToList();
 
         foreach (var number1 in numbers)
         {
