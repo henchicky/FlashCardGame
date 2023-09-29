@@ -7,7 +7,7 @@ public class GameService : IGameService
     private readonly Dictionary<string, int> _scores = new();
     private readonly Dictionary<string, int> _answers = new();
 
-    public GameDetails GenerateGameRequest(GameDetailsRequest request)
+    public GameDetails GenerateGameDetails(GameDetailsRequest request)
     {
         var rnd = new Random();
         var num1 = rnd.Next(0, 12);
@@ -23,7 +23,7 @@ public class GameService : IGameService
             Number1 = num1,
             Number2 = num2,
             Operator = operatorType,
-            Score = GetAnswer(num1, num2, operatorType)
+            Score = GetScore(request.User)
         };
     }
 

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
