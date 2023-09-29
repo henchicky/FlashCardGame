@@ -11,7 +11,7 @@ interface RuleForm {
   input: number | null
 }
 
-const user = ref<string>(Math.random().toString())
+const user = ref<string>(generateRandomUser())
 const gameDetail = ref<GameDetails>({
   number1: null,
   number2: null,
@@ -27,13 +27,17 @@ const gameDetailRef = ref<FormInstance>()
 const answer = reactive<RuleForm>({
   input: null
 })
-
 const rules = reactive<FormRules<RuleForm>>({
   input: [
     {
       required: true,
       message: 'Required!',
       trigger: 'blur'
+    },
+    {
+      message: 'Non Number!',
+      trigger: 'blur',
+      type: "number"
     }
   ]
 })
@@ -41,7 +45,7 @@ const rules = reactive<FormRules<RuleForm>>({
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
 
-  await formEl.validate((valid, fields) => {
+  await formEl.validate((valid) => {
     if (valid) {
       axios.post<boolean>("http://localhost:5176/Game/Input", { input: answer.input, user: user.value })
         .then(res => {
@@ -54,20 +58,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             })
           }
         })
-    } else {
-      console.log('error submit!', fields)
     }
   })
-}
-
-const resetGame = (formEl: FormInstance | undefined) => {
-  if (formEl)
-    formEl.resetFields()
-  console.log("reset")
-  gameStatus.value = GameState.Pending
-  clearInterval(interval)
-  // axios.post("http://localhost:5176/Game/Reset")
-  // .catch(err => console.log(err))
 }
 
 function getGameDetails() {
@@ -81,7 +73,7 @@ function getGameDetails() {
 
 function startGame() {
   gameStatus.value = GameState.Start;
-  timer.value = 6
+  timer.value = 10
   interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
@@ -93,12 +85,26 @@ function startGame() {
   }, 1000)
 }
 
+const resetGame = (formEl: FormInstance | undefined) => {
+  if (formEl)
+    formEl.resetFields()
+  console.log("reset")
+  gameStatus.value = GameState.Pending
+  user.value = generateRandomUser()
+  clearInterval(interval)
+}
+
+function generateRandomUser(){
+  return Math.random().toString()
+}
+
 onBeforeMount(() => getGameDetails())
 </script>
 
 <template>
   <div v-if="gameStatus == GameState.Start">
-    <el-form ref="gameDetailRef" :model="answer" :rules="rules" @keydown.enter="submitForm(gameDetailRef)" @submit.native.prevent>
+    <el-form ref="gameDetailRef" :model="answer" :rules="rules" @keydown.enter="submitForm(gameDetailRef)"
+      @submit.native.prevent>
       <b>{{ timer }}</b> secs
       <br />
       <br />
@@ -121,39 +127,49 @@ onBeforeMount(() => getGameDetails())
         </el-col>
         <el-col :span="8">
           <el-form-item prop="input">
-            <el-input-number v-model="answer.input" :controls="false" autofocus/>
+            <el-input v-model.number="answer.input" autofocus/>
           </el-form-item>
         </el-col>
       </el-row>
       <br />
-      <el-form-item>
-        <!-- <el-button type="primary" @click="submitForm(gameDetailRef)">
-          Submit
-        </el-button> -->
-        <el-button @click="resetGame(gameDetailRef)" type="info">Start Over</el-button>
-      </el-form-item>
+      <el-button @click="resetGame(gameDetailRef)" type="info">Start Over</el-button>
     </el-form>
   </div>
   <div v-else-if="gameStatus == GameState.Pending">
-    <h4>Welcome to the Abacus 101</h4>
+    <h2>Welcome to the Abacus 101</h2>
     <b>Choose the mathematical operations</b>
     <br />
     <br />
-    <el-select v-model="operatorDropdown" class="m-2" multiple>
+    <el-select v-model="operatorDropdown" multiple style="width: 300px;">
       <el-option v-for="item in operatorOptions" :key="item.value" :label="item.label" :value="item.value" />
     </el-select>
     <br />
     <br />
     <el-button type="primary" @click="startGame">Start Game</el-button>
+    <br />
+    <br />
+    <el-card class="box-card">
+      <template #header>
+        <div>
+          <span>Game Rules</span>
+        </div>
+      </template>
+      <div>
+        <span>- Correct attempt will be awarded 1 mark.</span>
+        <br />
+        <span>- Incorrect attempt will be deducted 1 mark.</span>
+        <br />
+        <span>- For division: round down to nearest whole number.</span>
+        <br />
+        <span>- <b>Enter</b> to submit you answer.</span>
+      </div>
+    </el-card>
   </div>
   <div v-else>
-    <b>Congrats!</b>
-    <br />
-    You scored {{ gameDetail.score }} points.
-    <br />
-    <br />
-    <el-button @click="resetGame(gameDetailRef)">Play again</el-button>
+    <el-result icon="success" title="Congrats!" :sub-title="'You scored ' + gameDetail.score + ' points.'">
+      <template #extra>
+        <el-button type="primary" @click="resetGame(gameDetailRef)">Play again</el-button>
+      </template>
+    </el-result>
   </div>
 </template>
-
-<style scoped></style>
