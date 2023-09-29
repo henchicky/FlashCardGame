@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import axios from "axios"
 import { GameDetails } from "./models/requests"
@@ -63,7 +63,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 function getGameDetails() {
-  axios.post<GameDetails>("http://localhost:5176/Game/GameDetails", { operatorTypes: operatorDropdown.value, user: generateRandomUser() })
+  axios.post<GameDetails>("http://localhost:5176/Game/GameDetails", { operatorTypes: operatorDropdown.value, user: user.value })
     .then(res => {
       gameDetail.value = res.data
       answer.input = null
@@ -73,8 +73,9 @@ function getGameDetails() {
 }
 
 function startGame() {
+  user.value = generateRandomUser()
   getGameDetails()
-  timer.value = 60
+  timer.value = 10
   interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
@@ -96,8 +97,6 @@ const resetGame = (formEl: FormInstance | undefined) => {
 function generateRandomUser(){
   return Math.random().toString()
 }
-
-onBeforeMount(() => getGameDetails())
 </script>
 
 <template>
