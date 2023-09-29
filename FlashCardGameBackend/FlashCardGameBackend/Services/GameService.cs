@@ -1,3 +1,4 @@
+using FlashCardGameBackend.Extensions;
 using FlashCardGameBackend.Models;
 
 namespace FlashCardGameBackend.Services;
@@ -6,22 +7,51 @@ public class GameService : IGameService
 {
     private readonly Dictionary<string, int> _scores = new();
     private readonly Dictionary<string, int> _answers = new();
+    private readonly List<(int, int)> _listOfPairs = new();
+
+    public GameService()
+    {
+        GenerateListOfPossibilities();
+    }
+
+    private void GenerateListOfPossibilities()
+    {
+        var numbers = Enumerable.Range(1, 3).ToList();
+
+        foreach (var number1 in numbers)
+        {
+            foreach (var number2 in numbers)
+            {
+                _listOfPairs.Add((number1, number2));
+            }
+        }
+
+        _listOfPairs.Shuffle();
+    }
 
     public GameDetails GenerateGameDetails(GameDetailsRequest request)
     {
         var rnd = new Random();
-        var num1 = rnd.Next(0, 12);
-        var num2 = rnd.Next(0, 12);
+
+        if (_listOfPairs.Count == 0)
+        {
+            GenerateListOfPossibilities();
+        }
+
+        var randomIndex = rnd.Next(0, _listOfPairs.Count - 1);
+        var randomPair = _listOfPairs[randomIndex];
+        _listOfPairs.RemoveAt(randomIndex);
+
         var index = rnd.Next(request.OperatorTypes.Count);
         var operatorType = request.OperatorTypes[index];
 
         _answers.Remove(request.User);
-        _answers.Add(request.User, GetAnswer(num1, num2, operatorType));
+        _answers.Add(request.User, GetAnswer(randomPair.Item1, randomPair.Item2, operatorType));
 
         return new GameDetails
         {
-            Number1 = num1,
-            Number2 = num2,
+            Number1 = randomPair.Item1,
+            Number2 = randomPair.Item2,
             Operator = operatorType,
             Score = GetScore(request.User)
         };

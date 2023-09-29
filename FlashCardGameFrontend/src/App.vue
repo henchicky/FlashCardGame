@@ -73,7 +73,7 @@ function getGameDetails() {
 
 function startGame() {
   gameStatus.value = GameState.Start;
-  timer.value = 10
+  timer.value = 60
   interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
@@ -88,9 +88,9 @@ function startGame() {
 const resetGame = (formEl: FormInstance | undefined) => {
   if (formEl)
     formEl.resetFields()
-  console.log("reset")
   gameStatus.value = GameState.Pending
   user.value = generateRandomUser()
+  gameDetail.value.score = 0
   clearInterval(interval)
 }
 
