@@ -75,7 +75,7 @@ function getGameDetails() {
 function startGame() {
   user.value = generateRandomUser()
   getGameDetails()
-  timer.value = 10
+  timer.value = 60
   interval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--
