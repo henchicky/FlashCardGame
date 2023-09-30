@@ -69,7 +69,13 @@ function getGameDetails() {
       answer.input = null
       gameStatus.value = GameState.Start
     })
-    .catch(err => console.error(err))
+    .catch(_ => {
+      ElNotification({
+        title: 'Error',
+        message: 'Error connecting to server!',
+        type: 'error',
+      })
+    })
 }
 
 function startGame() {
