@@ -79,6 +79,14 @@ function getGameDetails() {
 }
 
 function startGame() {
+  if(operatorDropdown.value.length == 0){
+    ElNotification({
+      title: 'Error',
+      message: 'Please choose at least one mathematical operation!',
+      type: 'error',
+    })
+    return
+  }
   user.value = generateRandomUser()
   getGameDetails()
   timer.value = 60
@@ -136,7 +144,7 @@ function generateRandomUser(){
         </el-col>
       </el-row>
       <br />
-      <el-button @click="resetGame(gameDetailRef)" type="info">Start Over</el-button>
+      <el-button @click="resetGame(gameDetailRef)">Start Over</el-button>
     </el-form>
   </div>
   <div v-else-if="gameStatus == GameState.Pending">
